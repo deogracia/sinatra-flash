@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
 # See the spec_helper for the 'app' that we're testing.
 describe Sinatra::Flash do
