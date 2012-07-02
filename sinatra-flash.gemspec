@@ -16,37 +16,13 @@ Gem::Specification.new do |s|
     "LICENSE.markdown",
      "README.markdown"
   ]
-  s.files = [
-    ".document",
-     ".gitignore",
-     "LICENSE.markdown",
-     "README.markdown",
-     "Rakefile",
-     "VERSION",
-     "lib/sinatra/flash.rb",
-     "lib/sinatra/flash/hash.rb",
-     "lib/sinatra/flash/storage.rb",
-     "lib/sinatra/flash/style.rb",
-     "sinatra-flash.gemspec",
-     "spec/base_spec.rb",
-     "spec/flash/hash_spec.rb",
-     "spec/flash/style_spec.rb",
-     "spec/flash_spec.rb",
-     "spec/spec.opts",
-     "spec/spec_helper.rb"
-  ]
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.homepage = %q{http://github.com/SFEley/sinatra-flash}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Proper flash messages in Sinatra}
-  s.test_files = [
-    "spec/base_spec.rb",
-     "spec/flash/hash_spec.rb",
-     "spec/flash/style_spec.rb",
-     "spec/flash_spec.rb",
-     "spec/spec_helper.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
