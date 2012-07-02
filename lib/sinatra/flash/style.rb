@@ -1,7 +1,9 @@
 module Sinatra
   module Flash
+
+    # Handles the styling of flash in Sinatra views via the use of a helper method.
     module Style
-    
+
       # This block provides the default styling for the styled_flash method.
       DEFAULT_BLOCK = ->(id,vals) do
         %Q!<div id='#{id}'>\n#{vals.collect{|message| "  <div class='flash #{message[0]}'>#{message[1]}</div>\n"}}</div>!
@@ -43,7 +45,7 @@ module Sinatra
         block = DEFAULT_BLOCK if block.nil?
         output = block.call(id,flash(key))
       end
-      
+
     end
   end
 end

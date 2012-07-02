@@ -2,8 +2,10 @@ require 'sinatra/flash/hash'
 
 module Sinatra
   module Flash
+
+    # Provides a helper for accessing the flash storage.
     module Storage
-  
+
       # The main Sinatra helper for accessing the flash. You can have multiple flash collections (e.g.,
       # for different apps in your Rack stack) by passing a symbol to it.
       # 
@@ -17,7 +19,7 @@ module Sinatra
         @flash ||= {}
         @flash[key.to_sym] ||= FlashHash.new((session ? session[key.to_sym] : {}))
       end
-      
+
     end
   end
 end

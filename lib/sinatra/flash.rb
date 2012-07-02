@@ -6,6 +6,9 @@ require 'sinatra/flash/style'
 module Sinatra
   module Flash
     
+    # This makes the library available to Sinatra as an extension. Sinatra calls this, you don't.
+    # @see http://www.sinatrarb.com/extensions.html
+    # @private
     def self.registered(app)
       app.helpers Flash::Storage
       app.helpers Flash::Style
