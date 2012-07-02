@@ -15,7 +15,7 @@ The primary catch for experienced Rack developers is that it _does not_ function
 Setting Up
 ----------
 You should know this part:
-    
+
     $ gem install sinatra-flash
 
 (Or `sudo gem install` if you're the last person on Earth who isn't using [RVM][6] yet.)
@@ -55,7 +55,7 @@ If you're using the [Sinatra::Base][7] style, you also need to register the exte
         end
       end
     end
-    
+
 See the Sinatra documentation on [using extensions][8] for more detail and rationale.
 
 styled_flash
@@ -78,13 +78,51 @@ Yields (assuming three flash messages with different keys):
         </div>
       </body>
     </html>
-          
+
 Styling the CSS for the #flash id, the .flash class, or any of the key-based classes is entirely up to you.  
 
 (_Side note:_ This view helper was my initial reason for making this gem. I'd gotten used to pasting this little method in on every Rails project, and when I switched to Sinatra was distraught to discover that [Rack::Flash][2] couldn't do it, because the FlashHash isn't really a hash and you can't iterate it. Reinventing flash was sort of a side effect.)
 
 Advanced Tips
 -------------
+
+### Styling
+
+If the default styling does not suit you then you can supply a block to the `styled_flash` method, e.g.
+
+    -# (remember in Haml there's no need to close the block)
+    = styled_flash :key do |id,vals|
+      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+
+
+and that would produce an unordered html list like so:
+
+    <ul id='flash'>
+      <li class='flash info'>Greetings, Professor Falken.</li>
+      <li class='flash warning'>Wouldn't you prefer a good game of chess?</li>
+      <li class='flash fatal'>I should reach DEFCON 1 and launch my missiles in 28 hours. Would you like to see some projected kill ratios?</li>
+    </ul>
+
+Of course, it's probably better to store the block and pass it when needed:
+
+    my_lambda = ->(|id,vals|) do
+      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+    end
+    
+    # then in a view
+    = styled_flash :key, &my_lambda
+
+If you know you'll never use the default and would prefer your own block to be the default you can override the library's default callback this way:
+
+    # inside your Sinatra app
+    Sinatra::Flash::Styled::DEFAULT_BLOCK = ->(|id,vals|) do 
+      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+    end
+    
+    # inside a view, this now produces an unordered list
+    = styled_flash :key
+
+
 ### Now vs. Next
 The flash object acts like a hash, but it's really _two_ hashes:
 
@@ -100,7 +138,7 @@ This is usually what you want, and you don't have to worry about the details.  H
     
     # Look at messages upcoming in the next request
     @weapon = Stake.new if flash.next[:warning] == "The vampire is attacking."
-    
+
 In practice, you'll probably want to set `.now` any time you're displaying errors with an immediate render instead of redirecting.  It's hard to think of a common reason to check `.next` -- but it's there if you want it.
 
 ### Keep, Discard, and Sweep
