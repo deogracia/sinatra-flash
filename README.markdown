@@ -92,7 +92,7 @@ If the default styling does not suit you then you can supply a block to the `sty
 
     -# (remember in Haml there's no need to close the block)
     = styled_flash :key do |id,vals|
-      %Q!<ul id='#{id}'>\n#{vals.map{|(k,v)| "  <li class='flash #{k}'>#{v}</li>\n"}.join}</ul>!
+      - %Q!<ul id='#{id}'>\n#{vals.map{|(k,v)| "  <li class='flash #{k}'>#{v}</li>\n"}.join}</ul>!
 
 
 and that would produce an unordered html list like so:
