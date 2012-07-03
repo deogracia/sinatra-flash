@@ -6,7 +6,7 @@ module Sinatra
 
       # This block provides the default styling for the styled_flash method.
       DEFAULT_BLOCK = ->(id,vals) do
-        %Q!<div id='#{id}'>\n#{vals.collect{|message| "  <div class='flash #{message[0]}'>#{message[1]}</div>\n"}}</div>!
+        %Q!<div id='#{id}'>\n#{vals.collect{|message| "  <div class='flash #{message[0]}'>#{message[1]}</div>\n"}.join}</div>!
       end
 
       # A view helper for rendering flash messages to HTML with reasonable CSS structure. Handles 

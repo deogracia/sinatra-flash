@@ -51,25 +51,19 @@ describe 'styled_flash method' do
       context " that is the same as the default" do
         let(:my_block) {
           ->(id,vals) do
-            %Q!<div id='#{id}'>\n#{vals.collect{|message| "  <div class='flash #{message[0]}'>#{message[1]}</div>\n"}}</div>!
+            %Q!<div id='#{id}'>\n#{vals.collect{|message| "  <div class='flash #{message[0]}'>#{message[1]}</div>\n"}.join}</div>!
           end
         }
+        let(:smash) { "<div id='flash_smash'>\n  <div class='flash yoo'>yar</div>\n  <div class='flash zoo'>zar</div>\n</div>" }
 
         context "When that structure is empty" do
-          it "returns an empty string" do
-            styled_flash(:trash, &my_block).should == ""
-          end
+          subject { styled_flash(:trash, &my_block) }
+          it { should == "" }
         end
 
         context "When the structure is not empty" do
-          it "returns a div containing the key name" do
-            styled_flash(:smash, &my_block).should =~ /<div id='flash_smash'>/
-          end
-
-          it "returns each of the keys within that key as a class" do
-            styled_flash(:smash, &my_block).should =~ /<div class='flash yoo'>yar<\/div>/
-            styled_flash(:smash, &my_block).should =~ /<div class='flash zoo'>zar<\/div>/
-          end
+          subject { styled_flash(:smash, &my_block) }
+          it { should == smash }
         end
       end
 
