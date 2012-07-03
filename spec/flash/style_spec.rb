@@ -76,33 +76,40 @@ describe 'styled_flash method' do
       context "That is different to the default" do
         let(:my_block) {
           ->(id,vals) do
-            %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+            %Q!<ul id='#{id}'>\n#{vals.map{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}.join}</ul>!
           end
         }
+        let(:smash){ "<ul id='flash_smash'>\n  <li class='flash yoo'>yar</li>\n  <li class='flash zoo'>zar</li>\n</ul>" }
+        let(:just_flash) { "<ul id='flash'>\n  <li class='flash foo'>bar</li>\n  <li class='flash too'>tar</li>\n</ul>" }
 
         context "When that structure is empty" do
-          it "returns an empty string" do
-            styled_flash(:trash, &my_block).should == ""
-          end
+          subject { styled_flash(:trash, &my_block) }
+          it { should == "" }
         end
 
         context "When the structure is not empty" do
-          it "returns a div containing the key name" do
-            styled_flash(:smash, &my_block).should =~ /<ul id='flash_smash'>/
-          end
+          subject { styled_flash(:smash, &my_block) }
+          it { should == smash }
+        end
 
-          it "returns each of the keys within that key as a class" do
-            styled_flash(:smash, &my_block).should =~ /<li class='flash yoo'>yar<\/li>/
-            styled_flash(:smash, &my_block).should =~ /<li class='flash zoo'>zar<\/li>/
-          end
-          context "Given a block in the standard style" do
+        context "Given a block in the standard style" do
+          context "And a key" do
             subject {
               styled_flash :smash do |id,vals|
-                %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+                %Q!<ul id='#{id}'>\n#{vals.map{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}.join}</ul>!
               end
             }
-            it { should =~ /<li class='flash zoo'>zar<\/li>/ }
+            it { should == smash }
           end
+          context "And no key" do
+            subject {
+              styled_flash do |id,vals|
+                %Q!<ul id='#{id}'>\n#{vals.map{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}.join}</ul>!
+              end
+            }
+            it { should == just_flash }
+          end
+              
         end
 
       end

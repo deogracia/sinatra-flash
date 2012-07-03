@@ -40,6 +40,10 @@ module Sinatra
       #     styled_flash(:info, &my_styling)
       # @return [String] Styled HTML if the flash contains messages, or an empty string if it's empty.
       def styled_flash(key=:flash, &block)
+        if key.respond_to? :call
+          block = key
+          key = :flash
+        end
         return "" if flash(key).empty?
         id = (key == :flash ? "flash" : "flash_#{key}")
         block = DEFAULT_BLOCK if block.nil?

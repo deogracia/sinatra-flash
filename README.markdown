@@ -92,7 +92,7 @@ If the default styling does not suit you then you can supply a block to the `sty
 
     -# (remember in Haml there's no need to close the block)
     = styled_flash :key do |id,vals|
-      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+      %Q!<ul id='#{id}'>\n#{vals.map{|(k,v)| "  <li class='flash #{k}'>#{v}</li>\n"}.join}</ul>!
 
 
 and that would produce an unordered html list like so:
@@ -106,7 +106,7 @@ and that would produce an unordered html list like so:
 Of course, it's probably better to store the block and pass it when needed:
 
     my_lambda = ->(|id,vals|) do
-      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}.join}</ul>!
     end
     
     # then in a view
@@ -116,7 +116,7 @@ If you know you'll never use the default and would prefer your own block to be t
 
     # inside your Sinatra app
     Sinatra::Flash::Styled::DEFAULT_BLOCK = ->(|id,vals|) do 
-      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}}</ul>!
+      %Q!<ul id='#{id}'>\n#{vals.collect{|message| "  <li class='flash #{message[0]}'>#{message[1]}</li>\n"}.join}</ul>!
     end
     
     # inside a view, this now produces an unordered list
